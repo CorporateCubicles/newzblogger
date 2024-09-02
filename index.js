@@ -3,11 +3,12 @@ const app = express();
 require('dotenv').config();
 const mongoose = require('mongoose');
 const adminRoute = require("./routes/adminRoutes");
+const isBlogExist = require('./middleware/blogExist');
 
 const database_url = process.env.DATABASE_URL;
 const dbName = 'newzblogger';
 
-mongoose.connect(database_url, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(database_url);
 
 const db = mongoose.connection;
 
@@ -16,6 +17,10 @@ db.once('open',()=>{
     console.log('Connection established to', dbName );
 })
 
+
+app.use(isBlogExist.isBlogExistorNot);
+
+//for admin route
 app.use('/', adminRoute);
 
 app.get('/', (req,res)=>{
