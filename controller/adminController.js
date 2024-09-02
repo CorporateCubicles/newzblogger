@@ -17,8 +17,6 @@ const securePassword = async(password) => {
     }
 }
 
-
-
 const blogSetUp = async(req, res) => {
     try {
         const blogs = await BlogSetting.find({});
