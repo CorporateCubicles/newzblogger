@@ -3,10 +3,6 @@ const BlogSetting = require('../model/blogModel');  // Renamed to avoid conflict
 const User = require('../model/userModel');  // Renamed to avoid conflict
 const bcrypt = require('bcrypt');
 
-const login = async(req, res) => {
-    res.send('Login me hain');
-}
-
 const securePassword = async(password) => {
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -32,6 +28,13 @@ const blogSetUp = async(req, res) => {
     }
 }
 
+const dashboard = async(req, res)=>{
+    try {    
+        res.render('admin/dashboard')
+    } catch (error) {
+        console.log(error.message); 
+    }
+}
 
 const blogSetUpSave = async(req, res)=>{
     try{
@@ -64,7 +67,7 @@ const blogSetUpSave = async(req, res)=>{
         const savedUser = await newUser.save();
         console.log('User saved:', savedUser);
 
-        if(userData){
+        if(savedUser){
             res.redirect('/login');
         }
         else{
@@ -78,7 +81,7 @@ const blogSetUpSave = async(req, res)=>{
 
 // const blogSetUpSave = async (req, res) => {
 //     try {
-//            Check if file is available
+//         //    Check if file is available
 //         // console.log('File Info:', req.file); 
 
 //         // Destructure fields from request body
@@ -129,9 +132,9 @@ const blogSetUpSave = async(req, res)=>{
 // }
 
 
-
 module.exports = {
     blogSetUpSave,
     blogSetUp,
-    login
+    dashboard
+
 }
