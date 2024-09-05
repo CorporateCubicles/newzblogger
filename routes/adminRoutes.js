@@ -31,10 +31,12 @@ const storage = multer.diskStorage({
 
 const adminController = require("../controller/adminController");
 
-admin_router.get('/login', adminController.login );
+
 
 admin_router.get('/blog-setup', adminController.blogSetUp);
 
 admin_router.post('/blog-setup', upload.single('blog_image'),adminController.blogSetUpSave);
+
+admin_router.get('/dashboard', adminController.dashboard);
 
 module.exports = admin_router;
