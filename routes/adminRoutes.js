@@ -51,4 +51,9 @@ admin_router.post('/blog-setup', upload.single('blog_image'),adminController.blo
 
 admin_router.get('/dashboard', adminLoginAuth.isLogin ,adminController.dashboard);
 
+admin_router.get('/create-post', adminLoginAuth.isLogin ,adminController.loadPostdashboard);
+
+admin_router.post('/create-post', adminLoginAuth.isLogin ,adminController.addPost);
+
+
 module.exports = admin_router;
