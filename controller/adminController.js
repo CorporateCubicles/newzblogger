@@ -79,7 +79,7 @@ const blogSetUpSave = async(req, res)=>{
     }
 }
 
-// const blogSetUpSave = async (req, res) => {
+ // const blogSetUpSave = async (req, res) => {
 //     try {
 //         //    Check if file is available
 //         // console.log('File Info:', req.file); 
