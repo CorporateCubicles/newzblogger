@@ -12,6 +12,17 @@ const multer = require('multer');
 const path = require("path");
 admin_router.use(express.static('public'));
 
+admin_router.use(express.static('public'));
+
+const session = require('express-session');
+const sessionSecretKey = process.env.SESSION_SECRET_KEY;
+admin_router.use(session({
+    secret: sessionSecretKey,
+    resave: true,
+    saveUninitialized: true,
+    // cookie: { secure: true }
+  }));
+
 
 const storage = multer.diskStorage({
   
@@ -31,12 +42,13 @@ const storage = multer.diskStorage({
 
 const adminController = require("../controller/adminController");
 
+const adminLoginAuth = require('../middleware/adminLoginAuth');
 
 
 admin_router.get('/blog-setup', adminController.blogSetUp);
 
 admin_router.post('/blog-setup', upload.single('blog_image'),adminController.blogSetUpSave);
 
-admin_router.get('/dashboard', adminController.dashboard);
+admin_router.get('/dashboard', adminLoginAuth.isLogin ,adminController.dashboard);
 
 module.exports = admin_router;
