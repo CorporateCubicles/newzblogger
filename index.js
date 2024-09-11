@@ -4,6 +4,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const adminRoute = require("./routes/adminRoutes");
 const userRoute = require("./routes/userRoute");
+const blogRoute = require("./routes/blogRoute");
 
 const isBlogExist = require('./middleware/blogExist');
 
@@ -26,6 +27,8 @@ app.use(isBlogExist.isBlogExistorNot);
 app.use('/', adminRoute);
 
 app.use('/', userRoute);
+
+app.use('/', blogRoute);
 
 app.get('/', (req,res)=>{
     res.send("This is NEWZBLOGGER project ");
