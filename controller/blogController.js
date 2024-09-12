@@ -13,6 +13,19 @@ const loadBlogs = async(req, res) =>{
     }
 }
 
+const loadPost = async(req, res) =>{
+    try{
+
+      const post =  await Post.findOne({"_id":req.params.id});
+
+      res.render('post',{post:post});
+
+    }catch(error){
+        console.log(error.message);
+    }
+}
+
 module.exports = {
-    loadBlogs
+    loadBlogs,
+    loadPost
 }
