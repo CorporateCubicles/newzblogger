@@ -28,13 +28,9 @@ const loadPost = async(req, res) =>{
 const addComment = async(req, res)=>{
     try{
 
-        console.log(req.body.post_id);
-        console.log(req.body.username);
-        console.log(req.body.comment);
-
        const post_id=  req.body.post_id;
        const  username= req.body.username;
-        const comment =  req.body.comment;
+       const comment =  req.body.comment;
        
         await Post.findByIdAndUpdate({_id:post_id }, { $push:{ "comments": {username:username,  comment: comment}}});
 
