@@ -49,10 +49,18 @@ const loadPostdashboard = async(req, res)=>{
 
 const addPost = async(req, res)=>{
     try {    
+        var image = '';
+        if(req.body.image !== undefined){
+            image = req.body.image;
+
+        }else{
+            
+        }
 
         const newPost = new Post({
             title: req.body.title,
-            content : req.body.content
+            content : req.body.content,
+            image : image
         });
 
         const postData = await newPost.save();
@@ -161,6 +169,17 @@ const blogSetUpSave = async(req, res)=>{
 //     }
 // }
 
+const uploadPostImage = async(req, res)=>{
+    try{
+        let imagePath = '/images';
+        imagePath = imagePath+'/'+ req.file.filename;
+        res.send({success: true, msg:'Image uploaded successfully!!!', path:imagePath});
+        
+    }catch(error){
+        res.send({success: false, msg:error.message});
+    }
+}
+
 
 module.exports = {
     blogSetUpSave,
@@ -168,6 +187,7 @@ module.exports = {
     dashboard,
     loadPostdashboard,
     addPost,
-    securePassword
+    securePassword,
+    uploadPostImage
 
 }
