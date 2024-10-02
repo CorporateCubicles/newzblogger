@@ -55,5 +55,7 @@ admin_router.get('/create-post', adminLoginAuth.isLogin ,adminController.loadPos
 
 admin_router.post('/create-post', adminLoginAuth.isLogin ,adminController.addPost);
 
+admin_router.post('/upload-post-image',upload.single('image'),adminLoginAuth.isLogin, adminController.uploadPostImage);
+
 
 module.exports = admin_router;
