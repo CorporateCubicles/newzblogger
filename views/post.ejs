@@ -45,6 +45,7 @@
                                 <form class="mb-4" id="comment-form" name="comment-form">
                                     <input type="hidden" name="post_id" value="<%= post._id %>">
                                     <input type="text" name="username" placeholder="Enter Your Name" required class="form-control mb-3">
+                                    <input type="email" name="email" placeholder="Enter Your mail" required class="form-control mb-3">
                                     <textarea class="form-control" name="comment" required rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
                                     <input type="submit" class="btn btn-primary mt-3">
                                 </form>
@@ -60,6 +61,42 @@
                                             <div class="ms-3">
                                                 <div class="fw-bold"><%=comment.username%></div>
                                                 <%=comment.comment%>
+
+                                                <%
+                                                      if(comment.replies){
+                                                        comment.replies.forEach(function(reply){
+                                                            %>
+                                                            <div class="d-flex mt-3 mb-3">
+                                                                <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                                                                <div class="ms-3">
+                                                                    <div class="fw-bold"><%=reply.name%></div>
+                                                                    <%=reply.reply%>
+                                                                </div>
+                                                            </div>   
+                                                                                                                         
+                                                            <%
+                                                        })
+
+                                                      }   
+                                                %>
+
+                                                <div class="col-md-12">
+                                                    <form class="do-reply">
+                                                        <input type="hidden" name="post_id" value="<%= post._id%>">
+                                                        <input type="hidden" name="comment_id" value="<%= comment._id%>">
+                                                        
+                                                        <input type="hidden" name="comment_email" value="<%= comment.email %>">
+                                                        <div class="form-group">
+                                                            <input type="text" class="form-control" name="name" placeholder="Enter Name"required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <textarea class="form-control" name="reply" placeholder="Enter Reply"required></textarea>
+                                                        </div>
+                                                        <input type="submit" value="reply" class="btn btn-info btn-sm">
+
+                                                    </form>
+
+                                                </div>
                                             </div>
                                         </div>
     
@@ -103,14 +140,32 @@
                         success: function(data){
                             console.log(data);
                             $('.com-status').text(data.msg);
+                            $('#comment-form')[0].reset();
                             setTimeout(function(){
                                 $('.com-status').text('');
                             },5000);
                         }
                        
+                    });
+                });
+
+                $('.do-reply').submit(function(event){
+                    event.preventDefault();
+                    var formData = $(this).serialize();
+                    var obj = $(this);
+                    $.ajax({
+                        url:"/do-reply",
+                        type:"POST",
+                        data:formData,
+                        success:function(data){
+                            $(obj)[0].reset();
+                            $(obj).parent().parent().append('<p>'+data.msg+'</p>');
+
+                        }
                     })
+
                 })
-            })
+            });
         </script>
 
 <%- include('./layouts/footer.ejs')%>
