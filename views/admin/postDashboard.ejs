@@ -5,7 +5,7 @@
         <h2 class="mb-4">Add News</h2>
 
         <div class="container">
-            <form method="POST">
+            <form method="POST" id = 'addPost'>
                 <div class="row">
                     <div class="col-sm-12">
                         <h5>Title</h5>
@@ -86,6 +86,36 @@
                             $('#image').val(data.path)
                             alert(data.msg);
                             $('#uploadModal').modal('hide');
+                        }else{
+                            alert(data.msg);
+                        }
+                    },
+                })
+            })
+
+            $('#addPost').submit(function (event) {
+                event.preventDefault();
+                let obj = $(this);
+                let formData = {};
+                $.each($(this).serializeArray(), function(i, field){
+                    formData[field.name] = field.value;
+                });
+                // console.log(formData);
+
+                $.ajax({
+                    type: 'POST',
+                    url: "/create-post",
+                    data: formData,
+                    success: function (data) {
+                        if(data.success == true){
+                            alert(data.msg);
+                            $(obj)[0].reset();
+
+                            formData._id = data._id;
+
+                            let socket = io();
+                            socket.emit("new_post", formData);
+
                         }else{
                             alert(data.msg);
                         }

@@ -8,6 +8,10 @@ const blogRoute = require("./routes/blogRoute");
 
 const isBlogExist = require('./middleware/blogExist');
 
+let http = require('http').createServer(app);
+let {Server} = require('socket.io');
+let io = new Server(http, {});
+
 const database_url = process.env.DATABASE_URL;
 const dbName = 'newzblogger';
 
@@ -36,6 +40,20 @@ app.get('/', (req,res)=>{
 
 const PORTNo = process.env.PORT;
 
-app.listen(PORTNo, ()=>{
+io.on("connection", function(socket){
+    console.log('User connected');
+    socket.on("new_post", function(formData){
+        console.log(formData);
+        socket.broadcast.emit("new_post", formData);
+    });
+});
+
+
+// app.listen(PORTNo, ()=>{
+//     console.log(`Server started at PORT No ${PORTNo}`);
+// });
+
+
+http.listen(PORTNo, ()=>{
     console.log(`Server started at PORT No ${PORTNo}`);
 });
