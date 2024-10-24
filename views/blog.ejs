@@ -1,73 +1,4 @@
-<!-- <%- include('./layouts/header.ejs') %>
-
-    <!-- Page Content-->
-    <div class="container px-4 px-lg-5 posts">
-        <!-- Heading Row-->
-
-        <% if(posts.length> 0){
-            for(let i = posts.length-1 ; i >= 0; i--){
-
-            %>
-            <div class="row gx-4 gx-lg-5 align-items-center my-5">
-                <div class="col-lg-7">
-                    <% if(posts[i].image !==undefined && posts[i].image !=='' ){ %>
-                        <img class="img-fluid rounded mb-4 mb-lg-0" src="<%=posts[i].image%>" alt="..." />
-                        <% }else{ %>
-                            <img class="img-fluid rounded mb-4 mb-lg-0"
-                                src="https://dummyimage.com/900x400/dee2e6/6c757d.jpg" alt="..." />
-                            <% } %>
-                </div>
-                <div class="col-lg-5">
-                    <h1 class="font-weight-light">
-                        <%= posts[i].title %>
-                    </h1>
-                    <p>
-                        <%= posts[i].content %>
-                    </p>
-                    <a class="btn btn-primary" href="/post/<%=posts[i]._id %>">Read More</a>
-                </div>
-            </div>
-            <% } } else{ %>
-                <h1>News not available</h1>
-                <% } %>
-
-    </div>
-    <script>
-        let socket = io();
-        socket.on("new_post", function (formData) {
-            console.log(formData);
-            let html = "";
-            let image = "https://dummyimage.com/900x400/dee2e6/6c757d.jpg";
-            if(formData.image !==''){
-                image = formData.image;
-            }
-            html += `
-             <div class="row gx-4 gx-lg-5 align-items-center my-5">
-                <div class="col-lg-7">
-                    
-                        <img class="img-fluid rounded mb-4 mb-lg-0" src="`+image+`" alt="..." />
-                        
-                       
-                </div>
-                <div class="col-lg-5">
-                    <h1 class="font-weight-light">
-                        `+formData.title+`
-                    </h1>
-                    <p>
-                       `+formData.content+`
-                    </p>
-                    <a class="btn btn-primary" href="/post/`+formData._id+`">Read More</a>
-                </div>
-            </div>
-            
-            `;
-            $('.posts').prepend(html);
-         });
-    </script>
-
-    <%- include('./layouts/footer.ejs') %> -->
-
-    <%- include('./layouts/header.ejs') %>
+<%- include('./layouts/header.ejs') %>
 
 <!-- Include jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -78,11 +9,13 @@
 <div class="container px-4 px-lg-5 posts">
     <!-- Heading Row-->
 
-    <% if(posts.length > 0) {
-        for(let i = posts.length - 1; i >= 0; i++) { %>
+    <% if (posts.length > 0) { 
+        for (let i = posts.length - 1; i >= 0; i--) { 
+            if (posts[i]) { // Check if posts[i] is defined
+    %>
             <div class="row gx-4 gx-lg-5 align-items-center my-5">
                 <div class="col-lg-7">
-                    <% if(posts[i].image !== undefined && posts[i].image !== '') { %>
+                    <% if (posts[i].image !== undefined && posts[i].image !== '') { %>
                         <img class="img-fluid rounded mb-4 mb-lg-0" src="<%= posts[i].image %>" alt="..." />
                     <% } else { %>
                         <img class="img-fluid rounded mb-4 mb-lg-0" src="https://dummyimage.com/900x400/dee2e6/6c757d.jpg" alt="..." />
@@ -90,15 +23,23 @@
                 </div>
                 <div class="col-lg-5">
                     <h1 class="font-weight-light">
-                        <%= posts[i].title %>
+                        <%= posts[i].title %> <!-- This is safe now -->
                     </h1>
                     <p>
-                        <%= posts[i].content %>
+                        <%= posts[i].content %> <!-- This is safe now -->
                     </p>
                     <a class="btn btn-primary" href="/post/<%= posts[i]._id %>">Read More</a>
                 </div>
             </div>
-        <% } 
+            <% } else { %>
+                <!-- Optional: Handle undefined posts here if necessary -->
+                <div class="row gx-4 gx-lg-5 align-items-center my-5">
+                    <div class="col-lg-12">
+                        <h1 class="font-weight-light">Post is undefined</h1>
+                    </div>
+                </div>
+            <% } 
+        } 
     } else { %>
         <h1>News not available</h1>
     <% } %>
@@ -107,10 +48,6 @@
 <script>
     $(document).ready(function() {
         let socket = io();
-        socket.on('connect', () => {
-            console.log('Socket connected');
-        });
-        
         socket.on("new_post", function (formData) {
             console.log("Received new post:", formData);
             let html = "";
@@ -124,12 +61,8 @@
                         <img class="img-fluid rounded mb-4 mb-lg-0" src="` + image + `" alt="..." />
                     </div>
                     <div class="col-lg-5">
-                        <h1 class="font-weight-light">
-                            ` + formData.title + `
-                        </h1>
-                        <p>
-                            ` + formData.content + `
-                        </p>
+                        <h1 class="font-weight-light">` + formData.title + `</h1>
+                        <p>` + formData.content + `</p>
                         <a class="btn btn-primary" href="/post/` + formData._id + `">Read More</a>
                     </div>
                 </div>

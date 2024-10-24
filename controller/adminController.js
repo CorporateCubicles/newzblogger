@@ -69,7 +69,9 @@ const addPost = async(req, res)=>{
         res.send({success: true, message: 'Post added Successfully', _id: postData._id});
 
     } catch (error) {
-        res.send({success: false, msg: error.message});
+
+        console.log(error.msg);
+        // res.send({success: false, msg: error.message});
 
     }
 }
