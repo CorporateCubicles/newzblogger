@@ -51,6 +51,7 @@
                                 </form>
                                 <p class="com-status" style="color: green;"></p>
                                 <!-- Comment with nested comments-->
+                                <div id="comment-portion">
                                 <%
                                 if(post.comments.length>=0){
                                     post.comments = post.comments.reverse();
@@ -107,7 +108,7 @@
 
                                 %>
                                 <!-- Single comment-->
-
+                            </div>
                             </div>
                         </div>
                     </section>
@@ -128,16 +129,26 @@
             </div>
         </div>
         <script>
+            let socket = io();
             $(document).ready(function(){
                 $('#comment-form').submit(function(event){
                     event.preventDefault();
-                    var formData = $(this).serialize();
+                    let formData = {};
+                    $.each($(this).serializeArray(),function(i,field){
+                        formData[field.name] = field.value;
+
+                    });
 
                     $.ajax({
                         url:"/add-comment",
                         type:"POST",
                         data: formData,
                         success: function(data){
+
+                            formData._id = data._id;
+
+                            socket.emit("new_comment", formData);
+
                             console.log(data);
                             $('.com-status').text(data.msg);
                             $('#comment-form')[0].reset();
@@ -145,9 +156,28 @@
                                 $('.com-status').text('');
                             },5000);
                         }
-                       
                     });
                 });
+
+                //realtime comment show
+                socket.on("new_comment", function(comment){
+                    
+                    let html = '';
+
+                    html += `
+                        <div class="d-flex mt-3">
+                                        <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                                            <div class="ms-3">
+                                                <div class="fw-bold">`+comment.username+`</div>
+                                                `+comment.comment+`
+                                            </div>
+                                        </div>
+
+                     `;
+                     $('#comment-portion').prepend(html);
+
+                });
+
 
                 $('.do-reply').submit(function(event){
                     event.preventDefault();

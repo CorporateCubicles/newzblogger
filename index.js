@@ -46,6 +46,10 @@ io.on("connection", function(socket){
         console.log(formData);
         socket.broadcast.emit("new_post", formData);
     });
+
+    socket.on("new_comment", function(comment){
+        io.emit("new_comment", comment);
+    });
 });
 
 

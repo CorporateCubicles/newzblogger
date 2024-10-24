@@ -80,7 +80,7 @@ const addComment = async(req, res)=>{
         await Post.findByIdAndUpdate({_id:post_id }, { $push:{ "comments": {_id:comment_id, email: email, username:username,  comment: comment}}});
 
 
-        res.status(200).send({success:true, msg:'Comment Added!!!'});
+        res.status(200).send({success:true, msg:'Comment Added!!!', _id: comment_id });
     }
     catch(error){
         res.status(200).send({success:false, msg:error.message})
