@@ -48,7 +48,7 @@ io.on("connection", function(socket){
     });
 
     socket.on("new_comment", function(comment){
-        io.emit("new_comment", comment);
+        socket.broadcast.emit("new_comment", comment);
     });
 });
 
