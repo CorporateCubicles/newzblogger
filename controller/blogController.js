@@ -103,7 +103,7 @@ const doReply = async(req, res)=>{
 
         sendMailOnCommentReply(req.body.email, req.body.name, req.body.post_id);
 
-        res.status(200).send({success:true, msg: "Reply Successfully Added!!"});
+        res.status(200).send({success:true, msg: "Reply Successfully Added!!", _id:reply_id });
 
     }
     catch(error){
