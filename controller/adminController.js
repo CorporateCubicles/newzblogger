@@ -31,7 +31,8 @@ const blogSetUp = async(req, res) => {
 
 const dashboard = async(req, res)=>{
     try {    
-        res.render('admin/dashboard')
+        const allPosts = await Post.find({});
+        res.render('admin/dashboard', {posts: allPosts});
     } catch (error) {
         console.log(error.message); 
     }
